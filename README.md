@@ -46,5 +46,6 @@ Assumptions Made
 What I'd Improve With More Time
 • Performance Monitoring: Analytics and performance tracking
 • Recipe Rating System: Allow users to rate recipes
+• Pagination and scrolling for recipe lists
 • Would use constant variables inside utils for storing static values
 • Search Suggestions: Limited to 8 suggestions to maintain performance

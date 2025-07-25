@@ -1,21 +1,24 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Box,
   Typography,
   Card,
   CardContent,
+  CardMedia,
   Chip,
   LinearProgress,
   Alert,
   CircularProgress,
   Fade,
   Divider,
+  Skeleton,
 } from "@mui/material";
 import {
   Restaurant as RestaurantIcon,
   TrendingUp as TrendingIcon,
   SearchOff as SearchOffIcon,
   LocalDining as DiningIcon,
+  ImageNotSupported as NoImageIcon,
 } from "@mui/icons-material";
 import { RecipeResultsProps, RecipeMatch, Recipe } from "../types";
 import { FavoriteButton } from "./FavoritePanel";
@@ -33,6 +36,9 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
   isFavorite = false,
   onToggleFavorite,
 }) => {
+  const [imageLoading, setImageLoading] = useState(true);
+  const [imageError, setImageError] = useState(false);
+
   const getRankBadgeColor = (
     rank: number
   ): "primary" | "secondary" | "success" => {
@@ -61,6 +67,17 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
     }
   };
 
+  const handleImageLoad = () => {
+    setImageLoading(false);
+  };
+
+  const handleImageError = () => {
+    setImageLoading(false);
+    setImageError(true);
+  };
+
+  const hasImage = recipe.image && !recipe.image.includes("fallback");
+
   return (
     <Fade in timeout={300 + index * 100}>
       <Card
@@ -74,39 +91,154 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
             transform: "translateY(-4px)",
             boxShadow: 6,
           },
+          overflow: "hidden",
         }}
       >
-        <CardContent sx={{ flexGrow: 1, p: 3 }}>
+        {hasImage && (
           <Box
-            display="flex"
-            justifyContent="space-between"
-            alignItems="flex-start"
-            mb={2}
+            sx={{
+              position: "relative",
+              height: 200,
+              overflow: "hidden",
+            }}
           >
-            <Chip
-              label={getRankLabel(index)}
-              color={getRankBadgeColor(index)}
-              size="small"
-              sx={{ fontWeight: 600 }}
-            />
-            <Box display="flex" alignItems="center" gap={1}>
-              {onToggleFavorite && (
-                <FavoriteButton
-                  recipe={recipe}
-                  isFavorite={isFavorite}
-                  onToggleFavorite={onToggleFavorite}
-                />
-              )}
-              <Box textAlign="right">
-                <Typography variant="caption" color="text.secondary">
-                  Match Score
-                </Typography>
-                <Typography variant="h6" color="primary" fontWeight={700}>
-                  {recipe.matchPercentage}%
-                </Typography>
+            {imageLoading && (
+              <Skeleton
+                variant="rectangular"
+                width="100%"
+                height={200}
+                animation="wave"
+              />
+            )}
+
+            {!imageError ? (
+              <CardMedia
+                component="img"
+                height="200"
+                image={recipe.image}
+                alt={recipe.title}
+                onLoad={handleImageLoad}
+                onError={handleImageError}
+                sx={{
+                  display: imageLoading ? "none" : "block",
+                  objectFit: "cover",
+                  transition: "transform 0.3s ease-in-out",
+                  "&:hover": {
+                    transform: "scale(1.05)",
+                  },
+                }}
+              />
+            ) : (
+              <Box
+                sx={{
+                  height: 200,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  backgroundColor: "grey.100",
+                  color: "grey.500",
+                }}
+              >
+                <NoImageIcon sx={{ fontSize: 48 }} />
+              </Box>
+            )}
+
+            <Box
+              sx={{
+                position: "absolute",
+                top: 12,
+                left: 12,
+                right: 12,
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "flex-start",
+              }}
+            >
+              <Chip
+                label={getRankLabel(index)}
+                color={getRankBadgeColor(index)}
+                size="small"
+                sx={{
+                  fontWeight: 600,
+                  backgroundColor: "rgba(255, 255, 255, 0.9)",
+                  backdropFilter: "blur(4px)",
+                }}
+              />
+
+              <Box
+                sx={{
+                  backgroundColor: "rgba(255, 255, 255, 0.9)",
+                  backdropFilter: "blur(4px)",
+                  borderRadius: 1,
+                  px: 1,
+                  py: 0.5,
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 1,
+                }}
+              >
+                {onToggleFavorite && (
+                  <FavoriteButton
+                    recipe={recipe}
+                    isFavorite={isFavorite}
+                    onToggleFavorite={onToggleFavorite}
+                  />
+                )}
+                <Box textAlign="right">
+                  <Typography
+                    variant="caption"
+                    color="text.secondary"
+                    sx={{ fontSize: "0.7rem" }}
+                  >
+                    Match
+                  </Typography>
+                  <Typography
+                    variant="h6"
+                    color="primary"
+                    fontWeight={700}
+                    sx={{ fontSize: "1rem", lineHeight: 1 }}
+                  >
+                    {recipe.matchPercentage}%
+                  </Typography>
+                </Box>
               </Box>
             </Box>
           </Box>
+        )}
+
+        <CardContent sx={{ flexGrow: 1, p: 3 }}>
+          {!hasImage && (
+            <Box
+              display="flex"
+              justifyContent="space-between"
+              alignItems="flex-start"
+              mb={2}
+            >
+              <Chip
+                label={getRankLabel(index)}
+                color={getRankBadgeColor(index)}
+                size="small"
+                sx={{ fontWeight: 600 }}
+              />
+              <Box display="flex" alignItems="center" gap={1}>
+                {onToggleFavorite && (
+                  <FavoriteButton
+                    recipe={recipe}
+                    isFavorite={isFavorite}
+                    onToggleFavorite={onToggleFavorite}
+                  />
+                )}
+                <Box textAlign="right">
+                  <Typography variant="caption" color="text.secondary">
+                    Match Score
+                  </Typography>
+                  <Typography variant="h6" color="primary" fontWeight={700}>
+                    {recipe.matchPercentage}%
+                  </Typography>
+                </Box>
+              </Box>
+            </Box>
+          )}
 
           <Typography variant="h6" component="h3" fontWeight={600} gutterBottom>
             {recipe.title}
@@ -128,7 +260,7 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
           </Typography>
 
           <Box display="flex" flexWrap="wrap" gap={0.5} mb={2}>
-            {recipe.ingredients.map((ingredient) => {
+            {recipe.ingredients.slice(0, 8).map((ingredient) => {
               const isMatched = recipe.matchedIngredients.includes(ingredient);
               return (
                 <Chip
@@ -144,6 +276,15 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
                 />
               );
             })}
+            {recipe.ingredients.length > 8 && (
+              <Chip
+                label={`+${recipe.ingredients.length - 8} more`}
+                size="small"
+                variant="outlined"
+                color="default"
+                sx={{ fontSize: "0.75rem" }}
+              />
+            )}
           </Box>
 
           <Box>

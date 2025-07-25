@@ -2,6 +2,7 @@ export interface Recipe {
   title: string;
   ingredients: string[];
   description: string;
+  image?: string;
 }
 
 export interface RecipeMatch extends Recipe {

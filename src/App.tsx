@@ -10,6 +10,7 @@ import { Recipe } from "./types";
 import { useRecipeSearch } from "./hooks/useReceipeSearch";
 import { RecipeResults } from "./components/ReceipeResults";
 import { FavoritesPanel } from "./components/FavoritePanel";
+import { MAX_INGREDIENTS } from "./constants";
 
 const App: React.FC = () => {
   const { isDarkMode, toggleTheme } = useTheme();
@@ -39,8 +40,8 @@ const App: React.FC = () => {
         setIngredientError(null);
         return prev.filter((item) => item !== ingredient);
       } else {
-        if (prev.length >= 5) {
-          setIngredientError("Maximum 5 ingredients allowed");
+        if (prev.length >= MAX_INGREDIENTS) {
+          setIngredientError(`Maximum ${MAX_INGREDIENTS} ingredients allowed`);
           setTimeout(() => setIngredientError(null), 3000);
           return prev;
         }
@@ -71,7 +72,7 @@ const App: React.FC = () => {
       >
         <Header isDarkMode={isDarkMode} onThemeToggle={toggleTheme} />
 
-        <Container maxWidth="lg" sx={{ flexGrow: 1, py: 4 }}>
+        <Container maxWidth="xl" sx={{ flexGrow: 1, py: 4 }}>
           <IngredientSelector
             selectedIngredients={selectedIngredients}
             onIngredientToggle={handleIngredientToggle}

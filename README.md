@@ -1,46 +1,50 @@
-# Getting Started with Create React App
+Recipe Finder App
+A modern React application that helps users discover recipes based on available ingredients. Built with Material-UI and integrated with the Spoonacular API for real-time ingredient search and recipe recommendations.
+Features
+• Smart Ingredient Selection: Choose from popular ingredients or search through thousands of options
+• Real-time Autocomplete: Type-ahead search with keyboard navigation for finding specific ingredients
+• Recipe Matching: Get personalized recipe recommendations with match scores based on your selected ingredients
+• Visual Recipe Cards: Beautiful cards displaying recipe images, ingredient lists, and match percentages
+• Favorites System: Save your favorite recipes with a dedicated favorites panel - heart any recipe to add it to your collection
+• Persistent Storage: Your favorite recipes are saved locally and are persistant
+• Dark/Light Theme: Toggle between themes for comfortable viewing
+• Responsive Design: Works seamlessly on desktop, tablet, and mobile devices
+Tech Stack
+• Frontend: React 18 with TypeScript
+• UI Framework: Material-UI (MUI) v5
+• API Integration: Spoonacular Food API
+• State Management: React Hooks (useState, useEffect, custom hooks)
+• Build Tool: Create React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Setup instructions
 
-## Available Scripts
+Installation
+• Clone the repository
+• Install dependencies
+• npm install
+• Environment Setup
+Create a .env file in the root directory:
+REACT_APP_SPOONACULAR_API_KEY="key"
+• Start the development server
+• npm start
+• Open your browser
 
-In the project directory, you can run:
+Time Spent
+Total Development Time: 14 hours
+• Initial Setup & UI Components: 4 hours
+• Ingredient Selection System: 2 hours
+• API Integration: 3 hours
+• Autocomplete and search Feature: 2.5 hours
+• Recipe Display & Images: 1.5 hours
+• Favorites Panel: 1 hour
 
-### `npm start`
+Assumptions Made
+• Free Tier Limitations: Designed around Spoonacular's 150 requests/day limit
+• Local Storage: Used browser storage for favorites
+• Static Fallbacks: Included curated ingredient lists for offline functionality
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+What I'd Improve With More Time
+• Performance Monitoring: Analytics and performance tracking
+• Recipe Rating System: Allow users to rate recipes
+• Would use constant variables inside utils for storing static values
+• Search Suggestions: Limited to 8 suggestions to maintain performance

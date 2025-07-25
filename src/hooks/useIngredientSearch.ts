@@ -1,4 +1,6 @@
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback, useMemo, useEffect } from "react";
+import { SpoonacularService } from "../services/spoonacularService";
+import { FALLBACK_INGREDIENTS } from "../constants";
 
 export interface IngredientSearchResult {
   id: string;
@@ -6,73 +8,128 @@ export interface IngredientSearchResult {
   category?: string;
 }
 
-const EXPANDED_INGREDIENTS: IngredientSearchResult[] = [
-  { id: "1", name: "Chicken", category: "Protein" },
-  { id: "2", name: "Rice", category: "Grain" },
-  { id: "3", name: "Tomato", category: "Vegetable" },
-  { id: "4", name: "Onion", category: "Vegetable" },
-  { id: "5", name: "Garlic", category: "Vegetable" },
-  { id: "6", name: "Pasta", category: "Grain" },
-  { id: "7", name: "Cheese", category: "Dairy" },
-  { id: "8", name: "Spinach", category: "Vegetable" },
-  { id: "9", name: "Mushroom", category: "Vegetable" },
-  { id: "10", name: "Egg", category: "Protein" },
-
-  { id: "11", name: "Bell Pepper", category: "Vegetable" },
-  { id: "12", name: "Carrot", category: "Vegetable" },
-  { id: "13", name: "Broccoli", category: "Vegetable" },
-  { id: "14", name: "Potato", category: "Vegetable" },
-  { id: "15", name: "Beef", category: "Protein" },
-  { id: "16", name: "Salmon", category: "Protein" },
-  { id: "17", name: "Beans", category: "Legume" },
-  { id: "18", name: "Corn", category: "Vegetable" },
-  { id: "19", name: "Lemon", category: "Fruit" },
-  { id: "20", name: "Olive Oil", category: "Oil" },
-  { id: "21", name: "Butter", category: "Dairy" },
-  { id: "22", name: "Milk", category: "Dairy" },
-  { id: "23", name: "Basil", category: "Herb" },
-  { id: "24", name: "Oregano", category: "Herb" },
-  { id: "25", name: "Salt", category: "Seasoning" },
-  { id: "26", name: "Black Pepper", category: "Seasoning" },
-  { id: "27", name: "Flour", category: "Baking" },
-  { id: "28", name: "Sugar", category: "Baking" },
-  { id: "29", name: "Bread", category: "Grain" },
-  { id: "30", name: "Avocado", category: "Fruit" },
-];
-
 export const useIngredientSearch = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearchMode, setIsSearchMode] = useState(false);
+  const [searchResults, setSearchResults] = useState<IngredientSearchResult[]>(
+    []
+  );
+  const [popularIngredients, setPopularIngredients] = useState<
+    IngredientSearchResult[]
+  >([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [isApiAvailable, setIsApiAvailable] = useState(true);
 
-  const searchResults = useMemo(() => {
-    if (!searchQuery.trim()) return EXPANDED_INGREDIENTS.slice(0, 10);
+  useEffect(() => {
+    const loadPopularIngredients = () => {
+      setIsLoading(true);
 
-    const query = searchQuery.toLowerCase();
-    return EXPANDED_INGREDIENTS.filter(
-      (ingredient) =>
-        ingredient.name.toLowerCase().includes(query) ||
-        ingredient.category?.toLowerCase().includes(query)
-    ).slice(0, 8);
-  }, [searchQuery]);
+      const fallbackIngredients = FALLBACK_INGREDIENTS.map((name, index) => ({
+        id: `static-${index}`,
+        name,
+        category: "Popular",
+      }));
+
+      setPopularIngredients(fallbackIngredients);
+      setIsApiAvailable(true);
+      setIsLoading(false);
+    };
+
+    loadPopularIngredients();
+  }, []);
+
+  useEffect(() => {
+    if (!isSearchMode || !searchQuery.trim()) {
+      setSearchResults([]);
+      return;
+    }
+
+    const searchTimeout = setTimeout(async () => {
+      try {
+        setIsLoading(true);
+        setError(null);
+
+        const ingredients = await SpoonacularService.searchIngredients(
+          searchQuery,
+          10
+        );
+
+        if (ingredients.length > 0) {
+          const formattedResults = ingredients.map((ing) => ({
+            id: ing.id.toString(),
+            name: ing.name,
+            category: "Search Result",
+          }));
+          setSearchResults(formattedResults);
+          setIsApiAvailable(true);
+        } else {
+          throw new Error("No results from API");
+        }
+      } catch (err: any) {
+        console.error("Search failed:", err);
+        setIsApiAvailable(false);
+
+        if (
+          err.message?.includes("API key") ||
+          err.message?.includes("quota")
+        ) {
+          setError(err.message);
+        } else {
+          setError("API search failed, using basic search");
+        }
+
+        const query = searchQuery.toLowerCase();
+        const fallbackResults = FALLBACK_INGREDIENTS.filter((ingredient) =>
+          ingredient.toLowerCase().includes(query)
+        )
+          .slice(0, 8)
+          .map((name, index) => ({
+            id: `search-${index}`,
+            name,
+            category: "Search Result",
+          }));
+        setSearchResults(fallbackResults);
+      } finally {
+        setIsLoading(false);
+      }
+    }, 300);
+
+    return () => clearTimeout(searchTimeout);
+  }, [searchQuery, isSearchMode]);
+
+  const ingredientsToShow = useMemo(() => {
+    if (isSearchMode) {
+      return searchQuery.trim() ? searchResults : [];
+    }
+    return popularIngredients;
+  }, [isSearchMode, searchQuery, searchResults, popularIngredients]);
 
   const toggleSearchMode = useCallback(() => {
     setIsSearchMode((prev) => !prev);
     if (isSearchMode) {
       setSearchQuery("");
+      setSearchResults([]);
+      setError(null);
     }
   }, [isSearchMode]);
 
   const clearSearch = useCallback(() => {
     setSearchQuery("");
+    setSearchResults([]);
+    setError(null);
   }, []);
 
   return {
     searchQuery,
     setSearchQuery,
-    searchResults,
+    searchResults: ingredientsToShow,
     isSearchMode,
     toggleSearchMode,
     clearSearch,
-    allIngredients: EXPANDED_INGREDIENTS,
+    isLoading,
+    error,
+    isApiAvailable,
+    allIngredients: popularIngredients,
   };
 };

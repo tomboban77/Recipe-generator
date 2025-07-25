@@ -32,7 +32,7 @@ export const Header: React.FC<HeaderProps> = ({
           <RestaurantIcon sx={{ mr: 2, fontSize: 32 }} />
           <Box>
             <Typography variant="h5" component="h1" fontWeight={700}>
-              AI Recipe Generator
+              Recipe Generator
             </Typography>
             <Typography variant="caption" sx={{ opacity: 0.9 }}>
               Discover recipes from your ingredients

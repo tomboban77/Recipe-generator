@@ -16,7 +16,7 @@ Tech Stack
 • State Management: React Hooks (useState, useEffect, custom hooks)
 • Build Tool: Create React App
 Deployment
-• Deployed to Vercel: https://recipe-generator-dbd74xa86-toms-projects-a129da39.vercel.app/
+• Deployed to Vercel: https://github.com/tomboban77/Recipe-generator
 
 Setup instructions
 
@@ -26,18 +26,18 @@ Installation
 • npm install
 • Environment Setup
 Create a .env file in the root directory:
-REACT_APP_SPOONACULAR_API_KEY="key"
+REACT\_APP\_SPOONACULAR\_API\_KEY="key"
 • Start the development server
 • npm start
 • Open your browser
 
 Time Spent
 Total Development Time: 14 hours
-• Initial Setup & UI Components: 4 hours
+• Initial Setup \& UI Components: 4 hours
 • Ingredient Selection System: 2 hours
 • API Integration: 3 hours
 • Autocomplete and search Feature: 2.5 hours
-• Recipe Display & Images: 1.5 hours
+• Recipe Display \& Images: 1.5 hours
 • Favorites Panel: 1 hour
 
 Assumptions Made
@@ -51,3 +51,4 @@ What I'd Improve With More Time
 • Performance Monitoring: Analytics and performance tracking
 • Recipe Rating System: Allow users to rate recipes
 • Pagination and scrolling for recipe lists
+

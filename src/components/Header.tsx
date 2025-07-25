@@ -25,6 +25,7 @@ export const Header: React.FC<HeaderProps> = ({
       elevation={2}
       sx={{
         background: "linear-gradient(135deg, #2E7D32 0%, #4CAF50 100%)",
+        padding: "1rem",
       }}
     >
       <Toolbar>

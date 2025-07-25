@@ -8,19 +8,11 @@ export interface SpoonacularRecipe {
   id: number;
   title: string;
   image: string;
-  readyInMinutes: number;
-  servings: number;
   summary: string;
   extendedIngredients: Array<{
     id: number;
     name: string;
     original: string;
-  }>;
-  analyzedInstructions: Array<{
-    steps: Array<{
-      number: number;
-      step: string;
-    }>;
   }>;
 }
 
@@ -95,8 +87,6 @@ export class SpoonacularService {
         id: recipe.id,
         title: recipe.title,
         image: recipe.image,
-        readyInMinutes: 30,
-        servings: 4,
         summary: `A delicious recipe using ${recipe.usedIngredientCount} of your selected ingredients.`,
         extendedIngredients: [
           ...(recipe.usedIngredients || []).map((ing: any) => ({
@@ -110,7 +100,6 @@ export class SpoonacularService {
             original: ing.original || ing.name,
           })),
         ],
-        analyzedInstructions: [],
         usedIngredientCount: recipe.usedIngredientCount || 0,
         missedIngredientCount: recipe.missedIngredientCount || 0,
         likes: recipe.likes || 0,

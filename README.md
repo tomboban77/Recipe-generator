@@ -2,7 +2,7 @@ Recipe Finder App
 A modern React application that helps users discover recipes based on available ingredients. Built with Material-UI and integrated with the Spoonacular API (max 150 ) for real-time ingredient search and recipe recommendations.
 Features
 • Smart Ingredient Selection: Choose from popular ingredients or search through thousands of options
-• Real-time Autocomplete: Type-ahead search with keyboard navigation for finding specific ingredients
+• Real-time Autocomplete: Type-ahead search with keyboard navigation for finding specific ingredients via api results.
 • Recipe Matching: Get personalized recipe recommendations with match scores based on your selected ingredients
 • Visual Recipe Cards: Beautiful cards displaying recipe images, ingredient lists, and match percentages
 • Favorites System: Save your favorite recipes with a dedicated favorites panel - heart any recipe to add it to your collection
@@ -11,10 +11,12 @@ Features
 • Responsive Design: Works seamlessly on desktop, tablet, and mobile devices
 Tech Stack
 • Frontend: React 18 with TypeScript
-• UI Framework: Material-UI (MUI) v5
+• UI Framework: Material-UI (MUI)
 • API Integration: Spoonacular Food API
 • State Management: React Hooks (useState, useEffect, custom hooks)
 • Build Tool: Create React App
+Deployment
+• Deployed to Vercel: https://recipe-generator-dbd74xa86-toms-projects-a129da39.vercel.app/
 
 Setup instructions
 
@@ -41,10 +43,11 @@ Total Development Time: 14 hours
 Assumptions Made
 • Free Tier Limitations: Designed around Spoonacular's 150 requests/day limit
 • Local Storage: Used browser storage for favorites
-• Static Fallbacks: Included curated ingredient lists for offline functionality
+• Static Fallbacks: Included sample ingredient lists in case of api failure
 
 What I'd Improve With More Time
-• Use AI / ChatGPT (OpenAI's API)
+• Use AI / ChatGPT (OpenAI's API) for AI receipes.
+• Integrating Zustland or Redux for global state management
 • Performance Monitoring: Analytics and performance tracking
 • Recipe Rating System: Allow users to rate recipes
 • Pagination and scrolling for recipe lists

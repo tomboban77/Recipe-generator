@@ -1,5 +1,5 @@
 Recipe Finder App
-A modern React application that helps users discover recipes based on available ingredients. Built with Material-UI and integrated with the Spoonacular API for real-time ingredient search and recipe recommendations.
+A modern React application that helps users discover recipes based on available ingredients. Built with Material-UI and integrated with the Spoonacular API (max 150 ) for real-time ingredient search and recipe recommendations.
 Features
 • Smart Ingredient Selection: Choose from popular ingredients or search through thousands of options
 • Real-time Autocomplete: Type-ahead search with keyboard navigation for finding specific ingredients
